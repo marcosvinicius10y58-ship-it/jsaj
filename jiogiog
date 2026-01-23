@@ -180,7 +180,7 @@ Tabs.GeneralTab:Button({
 })
 
 Tabs.GeneralTab:Button({
-    Title = "飛行",
+    Title = "飛行（穿墙模式）",
     Icon = "wind",
     Callback = function()
         WindUI:Notify({ Title = "飛行", Content = "正在加載飛行腳本...", Duration = 3 })
