@@ -493,5 +493,4 @@ h.Visible=true
 h2.Visible=false
 f.BackgroundTransparency=0
 c.Position=UDim2.new(0,0,-1,27) end)
-fly.txt
-14 KB
+
