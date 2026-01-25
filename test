@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService") -- 引入HttpService用于JSON解析
 
 -- ************************ 远程白名单配置 ************************
-local WHITELIST_REMOTE_URL = "https://raw.githubusercontent.com/Mingchao855/QU/refs/heads/main/-"
+local WHITELIST_REMOTE_URL = "https://raw.githubusercontent.com/Mingchao855/QU/refs/heads/main/w.JSON"
 local TCWhitelist = {} -- 存储远程加载的白名单
 
 -- 远程加载白名单函数
