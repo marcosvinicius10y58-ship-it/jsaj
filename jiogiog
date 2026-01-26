@@ -380,11 +380,11 @@ Tabs.AttackTab:Input({
 
 Tabs.AttackTab:Input({
     Title = "攻擊速度",
-    Value = "0.0000000001",
+    Value = "0.3",
     Placeholder = "輸入攻擊速度",
     Callback = function(text)
-        local num = tonumber(text) or 0.0000000001
-        num = math.round(math.clamp(num, 0.05, 2) * 100) / 100
+        local num = tonumber(text) or 0.3
+        num = math.round(math.clamp(num, 0.03, 2) * 100) / 100
         Settings.ClickDelay = num
         WindUI:Notify({ Title = "攻擊速度", Content = "已設置為: " .. num, Duration = 2 })
     end
