@@ -21,5 +21,5 @@ if isLocalPlayerWhitelisted then
     })
 loadstring(game:HttpGet("https://raw.githubusercontent.com/s1050031-debug/jsaj/refs/heads/main/test2"))()
 else
-    localPlayer:Kick("你好，你好像還沒有白名單聯係我加白名單吧。我discrod是：_xingchen1 凌霄團dc：https://discord.gg/zc7ANA3M ")
+    localPlayer:Kick("你好，你好像還沒有白名單聯係我加白名單吧。我discrod是：haha_8899 老六團dc：https://discord.gg/zc7ANA3M ")
 end
