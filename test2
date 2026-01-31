@@ -325,7 +325,7 @@ Module.FastAttack = (function()
                 self.consecutiveFailures = 0
                 self.Equipped = LocalPlayer.Character and IsAlive(LocalPlayer.Character) and LocalPlayer.Character:FindFirstChildOfClass("Tool")
             end
-            task.delay(0.5, function() self:AttackNearest() end)
+            task.delay(0.01, function() self:AttackNearest() end)
             return
         end
         self.consecutiveFailures = 0
