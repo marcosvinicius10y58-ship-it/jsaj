@@ -127,7 +127,7 @@ Tabs.GeneralTab:Divider()
 
 Tabs.GeneralTab:Input({
     Title = "速度",
-    Value = "50",
+    Value = "200",
     Placeholder = "輸入速度值",
     Callback = function(value)
         local speed = tonumber(value)
@@ -396,11 +396,11 @@ Tabs.AttackTab:Input({
 
 Tabs.AttackTab:Input({
     Title = "攻擊速度",
-    Value = "0.3",
+    Value = "0.01",
     Placeholder = "輸入攻擊速度",
     Callback = function(text)
-        local num = tonumber(text) or 0.3
-        num = math.round(math.clamp(num, 0.05, 2) * 100) / 100
+        local num = tonumber(text) or 0.01
+        num = math.round(math.clamp(num, 0.01, 2) * 100) / 100
         Settings.ClickDelay = num
         WindUI:Notify({ Title = "攻擊速度", Content = "已設置為: " .. num, Duration = 2 })
     end
