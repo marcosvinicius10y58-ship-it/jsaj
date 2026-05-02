@@ -1,14 +1,14 @@
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 
--- ************************ Remove verificação de whitelist, entra direto ************************
+-- ************************ Remover verificação de whitelist, entrar direto ************************
 local LocalPlayer = Players.LocalPlayer
 while not LocalPlayer do
     Players.PlayerAdded:Wait()
     LocalPlayer = Players.LocalPlayer
 end
 
--- Notificação de boas-vindas
+-- Enviar notificação de boas-vindas
 pcall(function()
     StarterGui:SetCore("SendNotification", {
         Title = "Script Troll",
@@ -17,9 +17,9 @@ pcall(function()
     })
 end)
 
-warn("Script iniciado, carregando funções")
+warn("Script iniciado, começando a carregar funções")
 
--- ************************ Funções principais ************************
+-- ************************ Abaixo estão as funções principais do script (mantidas completas) ************************
 
 -- Carregar WindUI
 local success, WindUI = pcall(function()
@@ -35,18 +35,35 @@ if not success or not WindUI then
     return
 end
 
--- Tema
+-- Definir tema
 WindUI:SetTheme("Midnight")
 
+-- Notificação básica
 WindUI:Notify({
     Title = "Script Troll",
-    Content = "Carregando...",
+    Content = "Carregando",
     Duration = 5,
 })
 
 task.wait(1)
 
--- Criar janela
+-- Inicializar serviços
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+local Camera = Workspace.CurrentCamera
+
+-- Variáveis globais
+_G.ToggleStates = _G.ToggleStates or {}
+local translateSpeed = 50
+local translateConnection = nil
+local translateAccelEnabled = false
+local _G = _G or getfenv(0)._G
+_G.FastAttack = _G.FastAttack ~= nil and _G.FastAttack or true
+
+-- Criar janela principal
 local Window = WindUI:CreateWindow({
     Title = "Central Troll",
     Icon = "rbxassetid://6031280882",
@@ -58,26 +75,35 @@ local Window = WindUI:CreateWindow({
     ScrollBarEnabled = true,
 })
 
+-- Tecla G para abrir/fechar UI
 Window:SetToggleKey(Enum.KeyCode.G)
 
--- Abas
+-- Criar todas as abas
+local Tabs = {}
+
+-- Criar seções
 local noticeSection = Window:Section({ Title = "Avisos", Opened = true })
-local functionSection = Window:Section({ Title = "Funções", Opened = true })
-local configSection = Window:Section({ Title = "Configurações", Opened = true })
+local functionSection = Window:Section({ Title = "Funções principais", Opened = true })
+local configSection = Window:Section({ Title = "Configuração de tema", Opened = true })
 
 Tabs.NoticeTab = noticeSection:Tab({ Title = "Avisos", Icon = "info" })
-Tabs.GeneralTab = functionSection:Tab({ Title = "Principal", Icon = "settings" })
-Tabs.AttackTab = functionSection:Tab({ Title = "Ataque", Icon = "sword" })
+Tabs.GeneralTab = functionSection:Tab({ Title = "Função 1", Icon = "settings" })
+Tabs.AttackTab = functionSection:Tab({ Title = "Ataque em área", Icon = "sword" })
 Tabs.ESPTab = functionSection:Tab({ Title = "ESP", Icon = "eye" })
-Tabs.TeleportTab = functionSection:Tab({ Title = "Teleport", Icon = "map-pin" })
+Tabs.TeleportTab = functionSection:Tab({ Title = "Teleporte", Icon = "map-pin" })
+Tabs.ActivityTab = functionSection:Tab({ Title = "Função 2", Icon = "zap" })
+Tabs.texiaoTab = configSection:Tab({ Title = "Alterar efeitos", Icon = "palette" })
+Tabs.ThemeTab = configSection:Tab({ Title = "Cores do tema", Icon = "palette" })
 
--- Avisos
+-- ===================== Aba de avisos =====================
 Tabs.NoticeTab:Paragraph({
     Title = "Central Troll",
     Desc = "kkk",
     Image = "info",
     Color = "Red"
 })
+
+Tabs.NoticeTab:Divider()
 
 Tabs.NoticeTab:Paragraph({
     Title = "Atalho",
@@ -86,71 +112,103 @@ Tabs.NoticeTab:Paragraph({
     Color = "Green"
 })
 
--- Funções
+-- ===================== Aba geral =====================
+local currentZoom = 128
 Tabs.GeneralTab:Slider({
     Title = "Zoom da câmera",
     Value = { Min = 128, Max = 1000000, Default = 128 },
     Callback = function(value)
+        currentZoom = value
         LocalPlayer.CameraMaxZoomDistance = value
+        WindUI:Notify({ Title = "Zoom", Content = "Definido para: " .. value, Duration = 2 })
     end
 })
+
+Tabs.GeneralTab:Divider()
 
 Tabs.GeneralTab:Input({
     Title = "Velocidade",
     Value = "200",
-    Placeholder = "Digite a velocidade"
+    Placeholder = "Digite o valor da velocidade",
+    Callback = function(value)
+        local speed = tonumber(value)
+        if speed then
+            translateSpeed = speed
+            WindUI:Notify({ Title = "Velocidade", Content = "Definido para: " .. speed, Duration = 2 })
+        end
+    end
 })
 
 Tabs.GeneralTab:Toggle({
     Title = "Ativar speed",
-    Value = false
+    Value = false,
+    Callback = function(state)
+        translateAccelEnabled = state
+        if translateConnection then
+            translateConnection:Disconnect()
+            translateConnection = nil
+        end
+        if state then
+            translateConnection = RunService.Heartbeat:Connect(function()
+                local char = LocalPlayer.Character
+                if not char then return end
+                local humanoid = char:FindFirstChildOfClass("Humanoid")
+                if not humanoid or humanoid.Health <= 0 then return end
+                if humanoid.MoveDirection.Magnitude > 0 then
+                    local moveDirection = humanoid.MoveDirection
+                    local acceleration = moveDirection * translateSpeed / 30
+                    char:TranslateBy(acceleration)
+                end
+            end)
+            WindUI:Notify({ Title = "Speed", Content = "Ativado", Duration = 2 })
+        else
+            WindUI:Notify({ Title = "Speed", Content = "Desativado", Duration = 2 })
+        end
+    end
+})
+
+Tabs.GeneralTab:Divider()
+
+Tabs.GeneralTab:Button({
+    Title = "Voar (atravessar paredes)",
+    Icon = "wind",
+    Callback = function()
+        WindUI:Notify({ Title = "Voo", Content = "Carregando script de voo...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/s1050031-debug/jsaj/refs/heads/main/F"))()
+        end)
+    end
 })
 
 Tabs.GeneralTab:Button({
-    Title = "Voar (atravessar paredes)"
+    Title = "Remover lava",
+    Icon = "flame",
+    Callback = function()
+        WindUI:Notify({ Title = "Lava", Content = "Removendo lava...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/mknhghv/67/refs/heads/main/lava.txt"))()
+        end)
+    end
 })
 
 Tabs.GeneralTab:Button({
-    Title = "Remover lava"
+    Title = "Remover neblina",
+    Icon = "fog",
+    Callback = function()
+        WindUI:Notify({ Title = "Neblina", Content = "Removendo neblina...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/mknhghv/67/refs/heads/main/fog.txt"))()
+        end)
+    end
 })
 
 Tabs.GeneralTab:Button({
-    Title = "Remover neblina"
-})
-
-Tabs.GeneralTab:Button({
-    Title = "Diminuir gráficos"
-})
-
--- Ataque
-Tabs.AttackTab:Toggle({
-    Title = "Ativar ataque"
-})
-
-Tabs.AttackTab:Input({
-    Title = "Distância do ataque"
-})
-
-Tabs.AttackTab:Input({
-    Title = "Velocidade de ataque"
-})
-
-Tabs.AttackTab:Toggle({
-    Title = "Atacar monstros"
-})
-
-Tabs.AttackTab:Toggle({
-    Title = "Atacar jogadores"
-})
-
-Tabs.AttackTab:Toggle({
-    Title = "Auto V4"
-})
-
-Tabs.AttackTab:Toggle({
-    Title = "Auto V3"
-})
-
-Tabs.AttackTab:Toggle({
-    Title = "Haki automático"
+    Title = "Diminuir gráficos",
+    Icon = "fps boost",
+    Callback = function()
+        WindUI:Notify({ Title = "Gráficos", Content = "Diminuindo gráficos...", Duration = 3 })
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/mknhghv/67/refs/heads/main/fps%20boost.txt"))()
+        end)
+    end
 })
