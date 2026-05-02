@@ -1,26 +1,121 @@
-local StarterGui = game:GetService("StarterGui")
-local Players = game:GetService("Players")
-local Whitelisted = {
-    ["HYHuiBai"] = true,
-    ["gary43829"] = true,
-    ["Markgapp"] = true,
- }
-
-local function IsWhitelisted(player)
-    return Whitelisted[player.Name] or false
-end
-
-local localPlayer = Players.LocalPlayer
-
-local isLocalPlayerWhitelisted = IsWhitelisted(localPlayer)
-
-if isLocalPlayerWhitelisted then
+-- Welcome notification
+pcall(function()
     StarterGui:SetCore("SendNotification", {
-        Title = "白名單認證",
-        Text = "玩家:"..localPlayer.Name.."，檢查完畢白名單玩家，稍後老六2脚本",
-        Duration = 7,
+        Title = "Lao Liu Script",
+        Text = string.format("Welcome %s, loading script...", LocalPlayer.Name),
+        Duration = 5,
     })
-loadstring(game:HttpGet("https://raw.githubusercontent.com/s1050031-debug/jsaj/refs/heads/main/test2"))()
-else
-    localPlayer:Kick("你好，你好像還沒有白名單聯係我加白名單吧。我discrod是：haha_8899 老六團dc：https://discord.gg/zc7ANA3M ")
-end
+end)
+
+warn("Script started, loading features")
+
+-- Theme
+WindUI:SetTheme("Midnight")
+
+WindUI:Notify({
+    Title = "Lao Liu Script",
+    Content = "Loading...",
+    Duration = 5,
+})
+
+-- Window
+local Window = WindUI:CreateWindow({
+    Title = "Lao Liu Hub",
+    Icon = "rbxassetid://6031280882",
+    Author = "_xingchen1",
+    Folder = "WindUI",
+    Size = UDim2.fromOffset(580, 460),
+})
+
+-- Sections
+local noticeSection = Window:Section({ Title = "Notice", Opened = true })
+local functionSection = Window:Section({ Title = "Main Features", Opened = true })
+local configSection = Window:Section({ Title = "Theme Settings", Opened = true })
+
+-- Tabs
+Tabs.NoticeTab = noticeSection:Tab({ Title = "Notice", Icon = "info" })
+Tabs.GeneralTab = functionSection:Tab({ Title = "General", Icon = "settings" })
+Tabs.AttackTab = functionSection:Tab({ Title = "Combat", Icon = "sword" })
+Tabs.ESPTab = functionSection:Tab({ Title = "ESP", Icon = "eye" })
+Tabs.TeleportTab = functionSection:Tab({ Title = "Teleport", Icon = "map-pin" })
+Tabs.ActivityTab = functionSection:Tab({ Title = "Extra", Icon = "zap" })
+Tabs.texiaoTab = configSection:Tab({ Title = "Effects", Icon = "palette" })
+Tabs.ThemeTab = configSection:Tab({ Title = "Theme", Icon = "palette" })
+
+-- Notice Tab
+Tabs.NoticeTab:Paragraph({
+    Title = "Lao Liu Hub",
+    Desc = "Haha",
+    Image = "info",
+    Color = "Red"
+})
+
+Tabs.NoticeTab:Paragraph({
+    Title = "Hotkeys",
+    Desc = "G: Toggle UI",
+    Image = "keyboard",
+    Color = "Green"
+})
+
+-- General Tab
+Tabs.GeneralTab:Slider({
+    Title = "Camera Zoom Distance",
+})
+
+Tabs.GeneralTab:Input({
+    Title = "Speed",
+    Placeholder = "Enter speed value",
+})
+
+Tabs.GeneralTab:Toggle({
+    Title = "Speed Boost",
+})
+
+Tabs.GeneralTab:Button({
+    Title = "Fly (No Clip)",
+})
+
+Tabs.GeneralTab:Button({
+    Title = "Remove Lava",
+})
+
+Tabs.GeneralTab:Button({
+    Title = "Remove Fog",
+})
+
+Tabs.GeneralTab:Button({
+    Title = "FPS Boost",
+})
+
+-- Combat Tab
+Tabs.AttackTab:Toggle({
+    Title = "Attack Toggle",
+})
+
+Tabs.AttackTab:Input({
+    Title = "Attack Range",
+})
+
+Tabs.AttackTab:Input({
+    Title = "Attack Speed",
+})
+
+Tabs.AttackTab:Toggle({
+    Title = "Attack Mobs",
+})
+
+Tabs.AttackTab:Toggle({
+    Title = "Attack Players",
+})
+
+Tabs.AttackTab:Toggle({
+    Title = "Auto V4",
+})
+
+Tabs.AttackTab:Toggle({
+    Title = "Auto V3",
+})
+
+Tabs.AttackTab:Toggle({
+    Title = "Auto Haki",
+})
